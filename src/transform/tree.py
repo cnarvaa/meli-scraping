@@ -12,18 +12,17 @@ class Tree(object):
         self.json_tree = self.create_json_tree(documents)
 
     def create_json_tree(self, documents):
-        root = dict()
+        tree = benedict()
         max_depth = 0
         for document in documents:
-            level = root
+            path = ""
             words = document.split()
             max_depth = max(max_depth, len(words))
-            for word in words:
-                if word not in level:
-                    level[word] = dict()
-                level = level[word]
+            for node in words:
+                path += f".{node}"
+                tree[path+".counter"] = tree.get(path+".counter", 0)+1
         self.max_depth = max_depth
-        return root
+        return tree[""]
 
     def draw(self, parent_name, child_name):
         edge = pydot.Edge(parent_name, child_name)
@@ -31,19 +30,20 @@ class Tree(object):
 
     def populate_graph(self, node, parent=None, depth=4):
         for k, v in node.items():
-            if depth == 0:
-                return None
-            if isinstance(v, dict):
-                # We start with the root node whose parent is None
-                # we don't want to graph the None node
-                if parent:
+            if k != 'counter':
+                if depth == 0:
+                    return None
+                if isinstance(v, dict):
+                    # We start with the root node whose parent is None
+                    # we don't want to graph the None node
+                    if parent:
+                        self.draw(parent, k)
+                    self.populate_graph(v, k, depth-1)
+                else:
                     self.draw(parent, k)
-                self.populate_graph(v, k, depth-1)
-            else:
-                self.draw(parent, k)
-                # drawing the label using a distinct name
-                if v:
-                    self.draw(k, k+'_'+v)
+                    # drawing the label using a distinct name
+                    if v:
+                        self.draw(k, k+'_'+v)
 
     def write_tree(self, name, depth, graph_type="digraph", simplify=True):
         depth = min(depth, self.max_depth)
