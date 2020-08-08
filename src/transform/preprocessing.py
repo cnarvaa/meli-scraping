@@ -4,6 +4,9 @@ from src.settings import GB_MERGED_PATTERN
 from src.settings import KEY_PATTERN
 from src.settings import STOPWORDS
 from src.settings import COLLECTION_WORDS
+from src.settings import COLLECTION_COLORS
+from src.settings import COLLECTION_XIAOMI_WORDS
+from src.settings import COLLECTION_GB
 
 from typing import List
 
@@ -23,5 +26,7 @@ def preprocess_article(article) -> List[str]:
     article = GB_PATTERN.sub(r'\2gb', article)
     article = GB_MERGED_PATTERN.sub(r'\2gb \3gb', article)
     article = KEY_PATTERN.sub(r'\3 \2', article)
-    article = " ".join([word for word in article.split() if not (word in COLLECTION_WORDS or word in STOPWORDS)])
+    # article = " ".join([word for word in article.split() if not (word in COLLECTION_WORDS or word in STOPWORDS)])
+    article = " ".join([word for word in article.split() if (
+        word in COLLECTION_XIAOMI_WORDS or word in COLLECTION_GB or word in COLLECTION_COLORS)])
     return article
