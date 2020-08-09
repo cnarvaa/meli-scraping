@@ -22,7 +22,7 @@ def preprocess_article(article: str) -> str:
     Returns:
         str: normalized text
     """
-    article = URL_PATTERN.sub('', article.get_text()).lower().strip()
+    article = URL_PATTERN.sub(' ', article).lower().strip()
     article = GB_PATTERN.sub(r'\2gb', article)
     article = GB_MERGED_PATTERN.sub(r'\2gb \3gb', article)
     article = KEY_PATTERN.sub(r'\3 \2', article)

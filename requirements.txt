@@ -5,3 +5,4 @@ mypy==0.782
 graphviz==0.14.1
 pydot==1.4.1
 python-benedict==0.18.1
+pytest==6.0.1

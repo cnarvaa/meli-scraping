@@ -67,7 +67,8 @@ def get_articles_titles(urls: List[str]):
     threads = min(MAX_THREADS, len(urls))
     with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor:
         records = executor.map(get_content, repeat('span'), repeat({'class': 'main-title'}), urls)
-    return set(map(preprocess_article, chain(*records)))
+    records = map(lambda record: record.get_text(), chain(*records))
+    return set(map(preprocess_article, records))
 
 
 def get_xiaomi_links(url: str, product: str):
