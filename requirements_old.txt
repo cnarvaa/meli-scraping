@@ -1,6 +1,0 @@
-beautifulsoup4
-notebook
-nltk
-mypy
-graphviz
-python-benedict
